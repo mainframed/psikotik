@@ -5,6 +5,8 @@ from Queue import Queue #for threading
 from select import select
 import socket
 import time
+import random
+import getpass
 import signal
 import sys
 import argparse #needed for argument parsing
@@ -122,6 +124,130 @@ $$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4$$"' 
 
 
 	return "BBS4EVAR"
+def osp(stringer): #Old School Printer
+    for c in stringer:
+	sys.stdout.write( c )
+        sys.stdout.flush()
+        time.sleep(random.uniform(0, 0.35))
+    print "\n",
+
+def print_file_wink(s):
+    for c in s:
+	sys.stdout.write( c )
+        sys.stdout.flush()
+        time.sleep(random.uniform(0, 0.1))
+    print "\n",
+
+
+
+def encom_easter():
+	print bcolors.BLUE
+	osp("D9165747830")
+	time.sleep(random.random())	
+	print "\n\nEEEEEEE"
+	print "EE      nn nnn    cccc  oooo  mm mm mmmm"
+	time.sleep(random.random())
+	print "EEEEE   nnn  nn cc     oo  oo mmm  mm  mm"
+	print "EE      nn   nn cc     oo  oo mmm  mm  mm"
+	time.sleep(random.random())	
+	print "EEEEEEE nn   nn  ccccc  oooo  mmm  mm  mm\n"
+	print "READY"
+	time.sleep(random.random())	
+	osp("CLU")                                          
+	time.sleep(random.random())		
+	print "\nREQUEST ACCESS TO CLU PROGRAM"
+	time.sleep(random.random())	
+	osp("CODE 6 PASSWORD TO MEMORY 0222")
+	time.sleep(random.random())
+	print "\nILLEGAL CODE..."
+	print "CLU PROGRAM DETACHED FROM SYSTEM\n"	
+	osp("REQUEST... ACCESS TO CLU PROGRAM")	
+	time.sleep(random.random())	
+	print "\nLAST LOCATION: HIGH CLEARANCE MEMORY C4"
+	print "CONNECTION CLOSED\n\n"
+	time.sleep(random.random())	
+	osp("D9165747830")	
+	time.sleep(random.random())	
+	print "\n\nEEEEEEE"
+	print "EE      nn nnn    cccc  oooo  mm mm mmmm"
+	time.sleep(random.random())
+	print "EEEEE   nnn  nn cc     oo  oo mmm  mm  mm"
+	print "EE      nn   nn cc     oo  oo mmm  mm  mm"
+	time.sleep(random.random())	
+	print "EEEEEEE nn   nn  ccccc  oooo  mmm  mm  mm\n"
+	print "READY"
+	time.sleep(random.random())	
+	osp("ACCESS CODE 6. PASSWORD SERIES PS 17.")
+	osp("REINDEER FLOTILLA -WRITE")
+	time.sleep(random.random())	
+	print "\n\n"
+	print "YOU SHOULDN'T HAVE COME BACK",getpass.getuser().upper()
+	time.sleep(3)
+	print "\n\n\nREADY"
+	time.sleep(random.random())	
+	osp("REACTIVATE HIGH CLEARANCE MEMORY LOCATION C4")
+	time.sleep(random.random())	
+	osp("................")
+	time.sleep(random.random())
+	osp("................")
+	osp("................")	
+	time.sleep(random.random())
+	print "CODE SERIES C49-123 ... ACTIVATE."
+	time.sleep(random.random())	
+	print "CODE SERIES C4D-E38 ... ACTIVATE."
+	time.sleep(random.random())	
+	print "CODE SERIES C4C-036 ... ACTIVATE."	
+	time.sleep(random.random())
+	print "\n\n"	
+	print "THAT ISN'T GOING TO DO YOU ANY GOOD",getpass.getuser().upper()
+	time.sleep(3)
+	print "\n\nREADY"
+	time.sleep(random.random())	
+	osp("DIVIDE SYS6.RAND.FLOAT BY ZERO")
+	print "\n\n"
+	osp("xXxXXXxXX.../\//////////////")
+	time.sleep(2)
+	print "\n\n"
+	time.sleep(random.random())	
+	print "STOP",getpass.getuser().upper(),"YOU REALIZE I CAN'T ALLOW THIS"
+	time.sleep(4)
+	print "\nREADY"
+	time.sleep(random.random())	
+	print "\nACCESS COMMUNICATION SOCKET"
+	time.sleep(3)
+	print "TRON PROGRAM UPDATED\n"
+	time.sleep(random.random())	
+	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+" DEACTIVATE MCP IN PROGRESS"
+	time.sleep(random.random())	
+	osp("................")
+	time.sleep(random.random())
+	osp("................")
+	osp("................")	
+	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+" MCP DEACTIVATED"
+	print "\nREADY"
+	time.sleep(random.random())
+	osp("PRINT HISTORY - DSK1:DILLINGER.GAMES.ACCOUNTING.TRASH")
+	time.sleep(random.random())	
+	print_file_wink('''
+DSK1:DILLINGER.GAMES.ACCOUNTING.TRASH
+--------------------------------------------------------------------------------
+Access control:
+	This User: Encryption protection (level 5)
+	Other Users: Access Denied
+
+Access History:
+	File name   Project name       File Created       Last Access
+	WORMS       "Worm"             04-AUG by FLYNN    30-AUG by DILLINGER
+	KLINGON     "Klingon: Hunters" 15-APR by FLYNN    30-AUG by DILLINGER
+	LITBIKE     "Star Trek: Space" 22-JUN by FLYNN    30-AUG by DILLINGER
+	PARA        "Space Paranoids"  21-MAR by FLYNN    30-AUG by DILLINGER
+
+''') 
+	print bcolors.ENDC
+	sys.exit(0)
+	
+
+
 
 
 #start argument parser
@@ -137,6 +263,9 @@ parser.add_argument('-v','--verbose',help='Be verbose',default=False,dest='verbo
 args = parser.parse_args()
 results = parser.parse_args() # put the arg results in the variable results
 
+
+if results.tso_fake == "ENCOM" and results.port == "42":
+	easter_came_early = encom_easter()
 
 if results.logo: yay = logo()
 
