@@ -4,6 +4,7 @@ import re #for username regex
 from Queue import Queue #for threading
 from select import select
 import socket
+import os
 import time
 import random
 import getpass
@@ -131,7 +132,7 @@ def osp(stringer): #Old School Printer
         time.sleep(random.uniform(0, 0.35))
     print "\n",
 
-def print_file_wink(s):
+def mcp(s):
     for c in s:
 	sys.stdout.write( c )
         sys.stdout.flush()
@@ -155,17 +156,19 @@ def encom_easter():
 	time.sleep(random.random())	
 	osp("CLU")                                          
 	time.sleep(random.random())		
-	print "\nREQUEST ACCESS TO CLU PROGRAM"
+	mcp("\nREQUEST ACCESS TO CLU PROGRAM")
 	time.sleep(random.random())	
 	osp("CODE 6 PASSWORD TO MEMORY 0222")
 	time.sleep(random.random())
-	print "\nILLEGAL CODE..."
-	print "CLU PROGRAM DETACHED FROM SYSTEM\n"	
-	osp("REQUEST... ACCESS TO CLU PROGRAM")	
+	mcp("\nILLEGAL CODE...")
+	mcp("CLU PROGRAM DETACHED FROM SYSTEM\n")
+	osp("REQUEST ACCESS TO CLU PROGRAM")	
 	time.sleep(random.random())	
-	print "\nLAST LOCATION: HIGH CLEARANCE MEMORY C4"
-	print "CONNECTION CLOSED\n\n"
-	time.sleep(random.random())	
+	mcp("\nLAST LOCATION: HIGH CLEARANCE MEMORY C4")
+	print bcolors.RED
+	mcp("\n\nCONNECTION CLOSED\n\n")
+	print bcolors.BLUE
+	time.sleep(3)	
 	osp("D9165747830")	
 	time.sleep(random.random())	
 	print "\n\nEEEEEEE"
@@ -180,8 +183,10 @@ def encom_easter():
 	osp("ACCESS CODE 6. PASSWORD SERIES PS 17.")
 	osp("REINDEER FLOTILLA -WRITE")
 	time.sleep(random.random())	
-	print "\n\n"
-	print "YOU SHOULDN'T HAVE COME BACK",getpass.getuser().upper()
+	os.system("clear")
+	print "\n\n\n\n\n"
+	flynn = "YOU SHOULDN'T HAVE COME BACK ",getpass.getuser().upper()
+	mcp(flynn)
 	time.sleep(3)
 	print "\n\n\nREADY"
 	time.sleep(random.random())	
@@ -192,43 +197,54 @@ def encom_easter():
 	osp("................")
 	osp("................")	
 	time.sleep(random.random())
-	print "CODE SERIES C49-123 ... ACTIVATE."
+	print "CODE SERIES C49-123",
+	mcp(" ... ACTIVATE.")
 	time.sleep(random.random())	
-	print "CODE SERIES C4D-E38 ... ACTIVATE."
+	print "CODE SERIES C4D-E38", 
+	mcp(" ... ACTIVATE.")
 	time.sleep(random.random())	
-	print "CODE SERIES C4C-036 ... ACTIVATE."	
+	print "CODE SERIES C4C-036", 
+	mcp(" ... ACTIVATE.")	
 	time.sleep(random.random())
-	print "\n\n"	
-	print "THAT ISN'T GOING TO DO YOU ANY GOOD",getpass.getuser().upper()
+	os.system("clear")
+	print "\n\n\n\n\n"	
+	flynn = "THAT ISN'T GOING TO DO YOU ANY GOOD ",getpass.getuser().upper()
+	mcp(flynn)
 	time.sleep(3)
 	print "\n\nREADY"
 	time.sleep(random.random())	
 	osp("DIVIDE SYS6.RAND.FLOAT BY ZERO")
 	print "\n\n"
 	osp("xXxXXXxXX.../\//////////////")
+	mcp("   c  x   $   @  #  */  ****")
+	mcp(" 00 <.  $ v g   b...........")
 	time.sleep(2)
+	os.system("clear")
 	print "\n\n"
 	time.sleep(random.random())	
-	print "STOP",getpass.getuser().upper(),"YOU REALIZE I CAN'T ALLOW THIS"
+	flynn = "STOP ",getpass.getuser().upper(),"\nYOU REALIZE I CAN'T ALLOW THIS"
+	mcp(flynn)
 	time.sleep(4)
-	print "\nREADY"
+	print "\n\nREADY"
 	time.sleep(random.random())	
-	print "\nACCESS COMMUNICATION SOCKET"
+	mcp("\nACCESS COMMUNICATION SOCKET")
 	time.sleep(3)
-	print "TRON PROGRAM UPDATED\n"
+	mcp("TRON PROGRAM UPDATED\n")
 	time.sleep(random.random())	
-	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+" DEACTIVATE MCP IN PROGRESS"
+	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+"",
+	mcp(" DEACTIVATE MCP IN PROGRESS")
 	time.sleep(random.random())	
-	osp("................")
+	mcp("................")
 	time.sleep(random.random())
-	osp("................")
-	osp("................")	
-	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+" MCP DEACTIVATED"
-	print "\nREADY"
+	mcp("................")
+	mcp("................")	
+	print bcolors.WHITE+"\n[TRON]"+bcolors.BLUE+"",
+	mcp(" MCP DEACTIVATED")
+	print "\n\nREADY"
 	time.sleep(random.random())
 	osp("PRINT HISTORY - DSK1:DILLINGER.GAMES.ACCOUNTING.TRASH")
 	time.sleep(random.random())	
-	print_file_wink('''
+	mcp('''
 DSK1:DILLINGER.GAMES.ACCOUNTING.TRASH
 --------------------------------------------------------------------------------
 Access control:
@@ -237,9 +253,9 @@ Access control:
 
 Access History:
 	File name   Project name       File Created       Last Access
-	WORMS       "Worm"             04-AUG by FLYNN    30-AUG by DILLINGER
-	KLINGON     "Klingon: Hunters" 15-APR by FLYNN    30-AUG by DILLINGER
-	LITBIKE     "Star Trek: Space" 22-JUN by FLYNN    30-AUG by DILLINGER
+	WORM        "Worm"             04-AUG by FLYNN    30-AUG by DILLINGER
+	TANK        "Tank Hunter"      18-MAY by FlYNN    30-AUG by DILLINGER
+	LITBIKE     "Light Bike"       22-JUN by FLYNN    30-AUG by DILLINGER
 	PARA        "Space Paranoids"  21-MAR by FLYNN    30-AUG by DILLINGER
 
 ''') 
