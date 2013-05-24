@@ -9,6 +9,7 @@ screen then you need to sniff a real connection to the mainframe and find out
 what the hex stream looks like when you type 'TSO1' (for example) and change
 tso_command to reflect that value. 
 
+http://www.youtube.com/watch?v=sFJzvlU6EVk
 
 arguments:
   -h, --help            show this help message and exit
