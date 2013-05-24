@@ -12,6 +12,17 @@ import signal
 import sys
 import argparse #needed for argument parsing
 
+
+###############################################################
+###############################################################
+###############################################################
+# If the script doesn't work you need to change me by sniffing your connection and see what row/column
+# and command you need to run. For now it works on ADCD
+tso_command = "\x7d\xd9\xd8\x11\xd9\xd5\xa3\xa2\x96\xff\xef" #Putting TSO at row 21 column 22
+###############################################################
+###############################################################
+###############################################################
+
 #EBCDIC/ASCII converter, customize by me for use here
 # from http://www.pha.com.au/kb/index.php/Ebcdic.py
 a2e = [
@@ -383,7 +394,7 @@ while(1):
 		###############################################################
 		# If the script doesn't work you need to change me by sniffing your connection and see what row/column
 		# and command you need to run. For now it works on ADCD
-		MFsock.send("\x7d\xd9\xd8\x11\xd9\xd5\xa3\xa2\x96\xff\xef") #Putting TSO at row 21 column 22
+		MFsock.send(tso_command) #Putting TSO at row 21 column 22
 		###############################################################
 		###############################################################
 		###############################################################
