@@ -480,7 +480,7 @@ while(1):
 			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper()
  
 			valid_users.append(user)
-			if results.bruteforce: #if we're in brute then go through the wordlist
+			if results.brute: #if we're in brute then go through the wordlist
 				print "Brute Forcin!"
 				for password in wordlist:
 					print password
