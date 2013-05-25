@@ -284,8 +284,8 @@ parser.add_argument('-p','--port', help='Mainframe 3270 server port number, defa
 parser.add_argument('-s','--sleep',help='Seconds to sleep. !only change if you have problems connecting!. The default is 4 seconds.',default=4,type=int,dest='sleep')
 parser.add_argument('-f','--fake',help='Fake or bad userid to use to initially get us to TSO panel. Only change if default doesn\'t work. Be careful with this, userIDs can only contain letters, numbers or $,# and @',default="fakey",dest='tso_fake')
 parser.add_argument('-u','--userfile',help='File containing list of usernames', required=True,dest='userfile')
-parser.add_argument('-b','--brute',help='enables brute force mode. ',default=False,dest='brute',action='store_true')
-parser.add_argument('-w','--wordlist',help='Password file to use for bruteforcing.',required=False,dest='wordlist')
+#parser.add_argument('-b','--brute',help='enables brute force mode. ',default=False,dest='brute',action='store_true')
+#parser.add_argument('-w','--wordlist',help='Password file to use for bruteforcing.',required=False,dest='wordlist')
 parser.add_argument('-q','--quiet',help='Don\'t show all attempts, just discovered users',default=True,dest='quiet',action='store_false')
 parser.add_argument('-l','--nologo',help='Do not display the logo',default=True,dest='logo',action='store_false')
 parser.add_argument('-v','--verbose',help='Be verbose',default=False,dest='verbose',action='store_true')
@@ -293,15 +293,18 @@ args = parser.parse_args()
 results = parser.parse_args() # put the arg results in the variable results
 
 
-if results.tso_fake == "ENCOM" and results.port == "42":
+if results.tso_fake == "CLU" and results.port == "42":
 	easter_came_early = encom_easter()
 
 if results.logo: yay = logo()
 
+print bcolors.DARKGREY+"lll"+bcolors.PURPLE + " Target System \t: " +bcolors.WHITE+ "" + results.target
+print bcolors.DARKGREY+":::"+bcolors.PURPLE + " Username phIle\t: " +bcolors.WHITE+ "" + results.userfile
 
-if not results.wordlist and results.brute:
-	print bcolors.RED+"[ERR] Brute force specified but no wordlist given! try -w [file]"+bcolors.ENDC
-	sys.exit(0)
+
+#if not results.wordlist and results.brute:
+#	print bcolors.RED+"[ERR] Brute force specified but no wordlist given! try -w [file]"+bcolors.ENDC
+#	sys.exit(0)
 
 
 if results.tso_fake[0].isdigit() or len(results.tso_fake.strip()) > 7:# or re.match(r"\W", results.tso_fake): 
@@ -309,25 +312,23 @@ if results.tso_fake[0].isdigit() or len(results.tso_fake.strip()) > 7:# or re.ma
 	print "       you entered",results.tso_fake,""+bcolors.ENDC
 	sys.exit(0)
 
-usernames = Queue() #for eventual threading
-
 #--------------------------\
 # catch the ctrl-c to exit and say something instead of Punt!
 #--------------------------/
 def signal_handler(signal, frame):
-        print "BRUTE!" + bcolors.ENDC
+        print "EXCELSIOR!" + bcolors.ENDC
         sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
 #--------------------------\
 # User file enum chunk     
 #--------------------------/
-userfile=open(results.userfile)
 total_users = 0
 skipped = 0
 
+userfile=open(results.userfile)
+usernames = Queue() #for eventual threading
 for username in userfile:
-
 #TSO has weird rules for the user name so this checks that:
 # - The username doesn't start with a number
 # - It's not longer than 7 chars
@@ -338,13 +339,19 @@ for username in userfile:
 	else:
 		if results.verbose: print ""+ bcolors.PURPLE + "skipping " +bcolors.WHITE+ "" + username.strip()
 		skipped += 1
-print  bcolors.DARKGREY+"lll"+bcolors.PURPLE + " User Names ->  " +bcolors.WHITE+ "" + str(total_users)
-print bcolors.DARKGREY+":::"+bcolors.PURPLE + " Skipped Names ->  " +bcolors.WHITE+ "" + str(skipped)
+print  bcolors.DARKGREY+"..."+bcolors.PURPLE + " Total lusernames\t: " +bcolors.WHITE+ "" + str(total_users)
+print bcolors.PURPLE + "    Skipped Names \t: " +bcolors.WHITE+ "" + str(skipped)
 
 for i in xrange(1000): #for threading to be added at a later date
 	usernames.put(None)
 
-if results.brute: wordlist=open(results.wordlist)
+#if results.brute: 
+#	password = []
+#	wordlist=open(results.wordlist)
+#	for passes in wordlist:
+#		if len(passes.strip()) <= 8:# and re.match(r"[\W]", passes):
+#			password.append(passes.strip())
+		
 
 #-------------------------| You could begin threading here |-------------------------
 
@@ -367,11 +374,12 @@ done = False #such hackery
 pouring_one_out = "\x40" #for my homies
 too_many = False # Make sure we don't skip a user if we reach the max guesses
 valid_users = list() #A 1d array to hold the found user IDs. Displays all users IDs at the end. 
-
+#bruteforcin = False #set to true when we want to brute a user
+#brute_num = 1
 
 #print bcolors.PURPLE+"    Ultra Hyper-Threading Technology:"+bcolors.RED+" ON" #It's actually just normal threads. But, meh. When threading is added this will be enabled. 
 
-while(1):
+while not done:
 	r, w, e = select([MFsock], [], [MFsock])
 	for i in r:
 		try:
@@ -398,16 +406,7 @@ while(1):
 		time.sleep(results.sleep) #the hackiest work around
 		at_screen = False
 		if results.verbose: print bcolors.YELLOW + "    [!]Sending TSO command"
-		###############################################################
-		###############################################################
-		###############################################################
-		# If the script doesn't work you need to change me by sniffing your connection and see what row/column
-		# and command you need to run. For now it works on ADCD
-		MFsock.send(tso_command) #Putting TSO at row 21 column 22
-		###############################################################
-		###############################################################
-		###############################################################
-	
+		MFsock.send(tso_command) #Putting TSO command	
 	if re.match("\xF3\x00\x06\x40\x00\xF1\xC2\x00\x05\x01\xFF\xFF\x02\xFF\xEF$",buffer):
 		MFsock.send("\x88\x00\x16\x81\x86\x00\x08\x00\xf4\xf1\xf1\xf2\xf2\xf3\xf3\xf4\xf4\xf5\xf5\xf6\xf6\xf7\xf7\x00\x0d\x81\x87\x04\x00\xf0\xf1\xf1\xf2\xf2\xf4\xf4\x00\x22\x81\x85\x82\x00\x07\x10\x00\x00\x00\x00\x07\x00\x00\x00\x00\x65\x00\x25\x00\x00\x00\x02\xb9\x00\x25\x01\x00\xf1\x03\xc3\x01\x36\x00\x2e\x81\x81\x03\x00\x00\x50\x00\x18\x00\x00\x01\x00\x48\x00\x01\x00\x48\x07\x10\x00\x00\x00\x00\x00\x00\x13\x02\x00\x01\x00\x50\x00\x18\x00\x00\x01\x00\x48\x00\x01\x00\x48\x07\x10\x00\x1c\x81\xa6\x00\x00\x0b\x01\x00\x00\x50\x00\x18\x00\x50\x00\x18\x0b\x02\x00\x00\x07\x00\x10\x00\x07\x00\x10\x00\x07\x81\x88\x00\x01\x02\x00\x16\x81\x80\x80\x81\x84\x85\x86\x87\x88\xa1\xa6\xa8\x96\x99\xb0\xb1\xb2\xb3\xb4\xb6\x00\x08\x81\x84\x00\x0a\x00\x04\x00\x06\x81\x99\x00\x00\xff\xef") #Whoa! Look it up. 
 	if re.match("\xF1\xC2\xFF\xEF$",buffer) or re.search("\xF1\xC2\x11\x40\x40\x1D\xC8\xC9\xD2\xD1\xF5\xF6\xF7\xF0\xF0",buffer): 
@@ -451,13 +450,15 @@ while(1):
 			at_screen = True
 			enumeratin = False
 			too_many = True
+		#	bruteforcin = False
+		#	brute_num = 0
 			encoded = AsciiToEbcdic(user)+pouring_one_out*(7-len(user))
 			MFsock.send("\x7d\xc9\xc3\x11\xc6\xe3"+encoded+"\xff\xef")
 			time.sleep(results.sleep)
-			if not results.verbose: print "\t - Pop! Pop!" #Magnitude!
+			if not results.verbose and results.quiet: print "\t - Pop! Pop!" #Magnitude!
 		elif re.search("UserId "+user.upper()+" already logged",ascii_out): #if a user is logged in this error will show. Catch it and display the result
-			if results.quiet: print bcolors.GREEN+"\t - User FOUND! -"+bcolors.RED+" User is logged in!"
-			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper(),"-"+bcolors.RED+" User is logged in!"
+			if results.quiet: print bcolors.GREEN+"\t - FOUND USER! -"+bcolors.RED+" User is even logged in!"
+			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper(),"-"+bcolors.RED+" User is even logged in!"
 			valid_users.append(user)			
 			#now to logon again with a different user
 			user = usernames.get()
@@ -476,30 +477,31 @@ while(1):
 			encoded = AsciiToEbcdic(user)+pouring_one_out*(7-len(user))
 			MFsock.send("\x7d\xc9\xc3\x11\xc6\xe3"+encoded+"\xff\xef")
 		elif re.search("\xE8"+AsciiToEbcdic(user.upper()),buffer):
-			if results.quiet: print bcolors.GREEN+"\t - User FOUND!"
+			if results.quiet: print bcolors.GREEN+"\t - FOUND USER!"
 			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper()
- 
 			valid_users.append(user)
-			if results.brute: #if we're in brute then go through the wordlist
-				print "Brute Forcin!"
-				for password in wordlist:
-					print password
-				MFsock.send("\xf3\xc9\xc3\xff\xef")
-				at_screen = True
-				enumeratin = False
-				if too_many: too_many = False
-				time.sleep(results.sleep)
-
-	
-			else:
-				MFsock.send("\xf3\xc9\xc3\xff\xef")
-				at_screen = True
-				enumeratin = False
-				if too_many: too_many = False
-				time.sleep(results.sleep)
-
-	if done: break
-
+		#	if results.brute: #if we're in brute then go through the wordlist
+		#		if results.verbose: print bcolors.YELLOW+"\n    [!]Starting Brute Force Mode"
+		#		bruteforcin = True
+		#		if results.quiet: print bcolors.BLUE+"       Trying Password"+bcolors.RED+"",password[brute_num],
+		#		encoded = AsciiToEbcdic(password[brute_num])+pouring_one_out*(7-len(password[brute_num]))
+		#		MFsock.send("\x7d\xc9\xc4\x11\xc9\xc3"+encoded+"\xff\xef")
+		#		brute_num += 1
+		#	else:
+			MFsock.send("\xf3\xc9\xc3\xff\xef")
+			at_screen = True
+			enumeratin = False
+			if too_many: too_many = False
+			time.sleep(results.sleep)
+		#elif re.search("\xE8"+AsciiToEbcdic(user.upper()),buffer) and bruteforcin:
+		#	if results.quiet and brute_num > 0: 
+		#		print bcolors.BLUE+"Invalid Password"
+		#	if results.quiet: print bcolors.BLUE+"       Trying Password"+bcolors.RED+"",password[brute_num],
+		#	encoded = AsciiToEbcdic(password[brute_num])+pouring_one_out*(8-len(password[brute_num]))
+		#	MFsock.send("\x7d\xc9\xc4\x11\xc9\xc3"+encoded+"\xff\xef")
+		#	brute_num += 1
+			
+		
 
 #-------------------------| and end threading here |-------------------------
 
@@ -513,7 +515,7 @@ $$$  x(  total found :'''+bcolors.RED+"",'%05d' % len(valid_users),""+bcolors.DA
 
 
 for users in valid_users:
-	print "$$$  x(  valid user  :"+bcolors.GREEN+"",users,""+bcolors.DARKGREY+"\t                                        )x ,$$$"
+	print "$$$  x(  valid user  :"+bcolors.GREEN+"",users,""+bcolors.DARKGREY+"\t                                        )x  $$$"
 
 
 print '''$$$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4$$"' '''
