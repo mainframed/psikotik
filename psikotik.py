@@ -284,6 +284,8 @@ parser.add_argument('-p','--port', help='Mainframe 3270 server port number, defa
 parser.add_argument('-s','--sleep',help='Seconds to sleep. !only change if you have problems connecting!. The default is 4 seconds.',default=4,type=int,dest='sleep')
 parser.add_argument('-f','--fake',help='Fake or bad userid to use to initially get us to TSO panel. Only change if default doesn\'t work. Be careful with this, userIDs can only contain letters, numbers or $,# and @',default="fakey",dest='tso_fake')
 parser.add_argument('-u','--userfile',help='File containing list of usernames', required=True,dest='userfile')
+parser.add_argument('-b','--brute',help='enables brute force mode. ',default=false,dest='brute',action='store_false')
+parser.add_argument('-w','--wordlist',help='Password file to use for bruteforcing.',required=False,dest='wordlist')
 parser.add_argument('-q','--quiet',help='Don\'t show all attempts, just discovered users',default=True,dest='quiet',action='store_false')
 parser.add_argument('-l','--nologo',help='Do not display the logo',default=True,dest='logo',action='store_false')
 parser.add_argument('-v','--verbose',help='Be verbose',default=False,dest='verbose',action='store_true')
@@ -295,6 +297,11 @@ if results.tso_fake == "ENCOM" and results.port == "42":
 	easter_came_early = encom_easter()
 
 if results.logo: yay = logo()
+
+
+if not results.wordlist and results.brute:
+	print bcolors.RED+"[ERR] Brute force specified but no wordlist given! try -w [file]"+bcolors.ENDC
+	sys.exit(0)
 
 
 if results.tso_fake[0].isdigit() or len(results.tso_fake.strip()) > 7:# or re.match(r"\W", results.tso_fake): 
@@ -337,7 +344,9 @@ print bcolors.DARKGREY+":::"+bcolors.PURPLE + " Skipped Names ->  " +bcolors.WHI
 for i in xrange(1000): #for threading to be added at a later date
 	usernames.put(None)
 
-#-------------------------|
+if results.brute: wordlist=open(results.wordlist)
+
+#-------------------------| You could begin threading here |-------------------------
 
 
 try:
@@ -471,13 +480,22 @@ while(1):
 			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper()
  
 			valid_users.append(user)
-			MFsock.send("\xf3\xc9\xc3\xff\xef")
-			at_screen = True
-			enumeratin = False
-			if too_many: too_many = False
-			time.sleep(results.sleep)
+			if results.bruteforce: #if we're in brute then go through the wordlist
+				print "Brute Forcin!"
+				for password in wordlist:
+					print password
+			else:	
+				MFsock.send("\xf3\xc9\xc3\xff\xef")
+				at_screen = True
+				enumeratin = False
+				if too_many: too_many = False
+				time.sleep(results.sleep)
 
 	if done: break
+
+
+#-------------------------| and end threading here |-------------------------
+
 
 
 print bcolors.DARKGREY+'''
