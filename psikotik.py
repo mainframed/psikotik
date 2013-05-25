@@ -284,7 +284,7 @@ parser.add_argument('-p','--port', help='Mainframe 3270 server port number, defa
 parser.add_argument('-s','--sleep',help='Seconds to sleep. !only change if you have problems connecting!. The default is 4 seconds.',default=4,type=int,dest='sleep')
 parser.add_argument('-f','--fake',help='Fake or bad userid to use to initially get us to TSO panel. Only change if default doesn\'t work. Be careful with this, userIDs can only contain letters, numbers or $,# and @',default="fakey",dest='tso_fake')
 parser.add_argument('-u','--userfile',help='File containing list of usernames', required=True,dest='userfile')
-parser.add_argument('-b','--brute',help='enables brute force mode. ',default=false,dest='brute',action='store_false')
+parser.add_argument('-b','--brute',help='enables brute force mode. ',default=False,dest='brute',action='store_false')
 parser.add_argument('-w','--wordlist',help='Password file to use for bruteforcing.',required=False,dest='wordlist')
 parser.add_argument('-q','--quiet',help='Don\'t show all attempts, just discovered users',default=True,dest='quiet',action='store_false')
 parser.add_argument('-l','--nologo',help='Do not display the logo',default=True,dest='logo',action='store_false')
