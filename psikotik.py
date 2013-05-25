@@ -488,7 +488,7 @@ while(1):
 				at_screen = True
 				enumeratin = False
 				if too_many: too_many = False
-				time.sleep(results.sleep)d
+				time.sleep(results.sleep)
 
 	
 			else:
