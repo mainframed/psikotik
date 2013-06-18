@@ -337,22 +337,14 @@ for username in userfile:
 		usernames.put(username.strip()) #using a queue for eventually adding threading. 
 		total_users += 1
 	else:
-		if results.verbose: print ""+ bcolors.PURPLE + "skipping " +bcolors.WHITE+ "" + username.strip()
+		if results.verbose: print ""+ bcolors.PURPLE + "       [!] skipping " +bcolors.WHITE+ "" + username.strip()
 		skipped += 1
 print  bcolors.DARKGREY+"..."+bcolors.PURPLE + " Total lusernames\t: " +bcolors.WHITE+ "" + str(total_users)
 print bcolors.PURPLE + "    Skipped Names \t: " +bcolors.WHITE+ "" + str(skipped)
 
 for i in xrange(1000): #for threading to be added at a later date
 	usernames.put(None)
-
-#if results.brute: 
-#	password = []
-#	wordlist=open(results.wordlist)
-#	for passes in wordlist:
-#		if len(passes.strip()) <= 8:# and re.match(r"[\W]", passes):
-#			password.append(passes.strip())
 		
-
 #-------------------------| You could begin threading here |-------------------------
 
 
@@ -374,8 +366,6 @@ done = False #such hackery
 pouring_one_out = "\x40" #for my homies
 too_many = False # Make sure we don't skip a user if we reach the max guesses
 valid_users = list() #A 1d array to hold the found user IDs. Displays all users IDs at the end. 
-#bruteforcin = False #set to true when we want to brute a user
-#brute_num = 1
 
 #print bcolors.PURPLE+"    Ultra Hyper-Threading Technology:"+bcolors.RED+" ON" #It's actually just normal threads. But, meh. When threading is added this will be enabled. 
 
@@ -450,8 +440,6 @@ while not done:
 			at_screen = True
 			enumeratin = False
 			too_many = True
-		#	bruteforcin = False
-		#	brute_num = 0
 			encoded = AsciiToEbcdic(user)+pouring_one_out*(7-len(user))
 			MFsock.send("\x7d\xc9\xc3\x11\xc6\xe3"+encoded+"\xff\xef")
 			time.sleep(results.sleep)
@@ -480,32 +468,13 @@ while not done:
 			if results.quiet: print bcolors.GREEN+"\t - FOUND USER!"
 			else: print bcolors.YELLOW+"    [+]Valid User Found:"+bcolors.GREEN+"",user.upper()
 			valid_users.append(user)
-		#	if results.brute: #if we're in brute then go through the wordlist
-		#		if results.verbose: print bcolors.YELLOW+"\n    [!]Starting Brute Force Mode"
-		#		bruteforcin = True
-		#		if results.quiet: print bcolors.BLUE+"       Trying Password"+bcolors.RED+"",password[brute_num],
-		#		encoded = AsciiToEbcdic(password[brute_num])+pouring_one_out*(7-len(password[brute_num]))
-		#		MFsock.send("\x7d\xc9\xc4\x11\xc9\xc3"+encoded+"\xff\xef")
-		#		brute_num += 1
-		#	else:
 			MFsock.send("\xf3\xc9\xc3\xff\xef")
 			at_screen = True
 			enumeratin = False
 			if too_many: too_many = False
 			time.sleep(results.sleep)
-		#elif re.search("\xE8"+AsciiToEbcdic(user.upper()),buffer) and bruteforcin:
-		#	if results.quiet and brute_num > 0: 
-		#		print bcolors.BLUE+"Invalid Password"
-		#	if results.quiet: print bcolors.BLUE+"       Trying Password"+bcolors.RED+"",password[brute_num],
-		#	encoded = AsciiToEbcdic(password[brute_num])+pouring_one_out*(8-len(password[brute_num]))
-		#	MFsock.send("\x7d\xc9\xc4\x11\xc9\xc3"+encoded+"\xff\xef")
-		#	brute_num += 1
-			
-		
 
 #-------------------------| and end threading here |-------------------------
-
-
 
 print bcolors.DARKGREY+'''
                                                                             :::
