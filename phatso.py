@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# from https://gist.github.com/msimpson/1096950
-# I didn't write this. - SoF
+
 import curses, random, signal, os, time, sys, argparse, re, socket
 from Queue import Queue
 from select import select
@@ -131,7 +130,8 @@ def logo():
 '''
 
 
-
+# from https://gist.github.com/msimpson/1096950
+# I didn't write this. - SoF
 def flames(cycles):
 	screen  = curses.initscr()
 	width   = screen.getmaxyx()[1]
@@ -350,7 +350,7 @@ def hackers_egg():
 	printer("CONNECTION TERMINATED")
 
 	print bcolors.ENDC
-
+	sys.exit(0)
 
 
 
