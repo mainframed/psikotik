@@ -1,3 +1,7 @@
+#DO NO USE THIS TOOL
+
+This tool is deprecated in favor of using nmaps tso-enum script: https://nmap.org/nsedoc/scripts/tso-enum.html
+
 psikotik
 ========
 

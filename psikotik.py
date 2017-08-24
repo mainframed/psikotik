@@ -293,6 +293,13 @@ args = parser.parse_args()
 results = parser.parse_args() # put the arg results in the variable results
 
 
+print bcolors.RED + '''!!!!!!!!!!!!!!!!!!!!!!!!!! #DO NO USE THIS TOOL
+
+This tool is deprecated in favor of using nmaps tso-enum script: https://nmap.org/nsedoc/scripts/tso-enum.html
+'''
+sys.exit(-1)
+
+
 if results.tso_fake == "CLU" and results.port == "42":
 	easter_came_early = encom_easter()
 
